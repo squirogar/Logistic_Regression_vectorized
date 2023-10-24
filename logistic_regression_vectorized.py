@@ -4,12 +4,17 @@ import math
 def sigmoid(z):
     return 1/(1+np.exp(-z))
 
-def compute_cost(X, y, w, b):
+
+def compute_cost(X, y, w, b, lambda_=0):
+    m = X.shape[0]
     z = np.dot(X, w) + b # (m,)
     prediction = sigmoid(z) # (m,)
     losses = (-y * np.log(prediction)) - ((1 - y) * np.log(1 - prediction))  #(m,)
     cost = np.mean(losses) # scalar
+    cost += (np.sum(w**2) * lambda_ / (2*m)) # scalar
+
     return cost
+
 
 def compute_gradients(X, y, w, b):
     m = X.shape[0]
@@ -20,6 +25,7 @@ def compute_gradients(X, y, w, b):
     dj_db = np.mean(error)
     
     return dj_dw, dj_db
+
 
 def run_gradient_descent(self, X, y, w, b, alpha=0.01, num_iter=10, verbose=False):
     """
@@ -69,3 +75,4 @@ def run_gradient_descent(self, X, y, w, b, alpha=0.01, num_iter=10, verbose=Fals
     self.__weights = w
     self.__bias = b
     return w, b, history_cost, history_params    
+
