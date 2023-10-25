@@ -16,18 +16,20 @@ def compute_cost(X, y, w, b, lambda_=0):
     return cost
 
 
-def compute_gradients(X, y, w, b):
+def compute_gradients(X, y, w, b, lambda_=0):
     m = X.shape[0]
     z = np.dot(X, w) + b # (m,)
     prediction = sigmoid(z) # (m,)
     error = (prediction - y) # (m,)
-    dj_dw = np.dot(error, X) / m
-    dj_db = np.mean(error)
+    dj_dw = np.dot(error, X) / m # (n,)
+    dj_dw += (w * lambda_ / m) # (n,)
+
+    dj_db = np.mean(error) # scalar
     
     return dj_dw, dj_db
 
 
-def run_gradient_descent(self, X, y, w, b, alpha=0.01, num_iter=10, verbose=False):
+def run_gradient_descent(self, X, y, w, b, alpha=0.01, num_iter=10, lambda_=0, verbose=False):
     """
     Ejecuta Batch Gradient Descent para entrenar el modelo de regresión lineal.
         
